@@ -39,9 +39,9 @@ tokens = open(File.join(File.dirname(__FILE__), "secret.txt"), &:read).split("\n
   config.access_token_secret = tokens[3]
 end
 
-#@client.update(text)
+@client.update(text)
 
-@client.home_timeline.each do |tweet|
-  puts tweet.user.name + ":" + tweet.user.screen_name
-  puts tweet.text
-end
+#@client.home_timeline.each do |tweet|
+#  puts tweet.user.name + ":" + tweet.user.screen_name
+#  puts tweet.text
+#end
