@@ -19,16 +19,23 @@ JSON.parse(res.body).each do |event|
   if time.year != target.year || time.month != target.month || time.day != target.day
     next
   end
+
   # event type
   type = event["type"].sub("Event", "")
   # count event
   events[type] = (events[type] || 0) + 1
+
+  puts type + " " + event["repo"]["name"]
 end
 
-text = "GitHub Activity\n"
+puts "------------------"
+
+text = "GitHub Activity - #{target.strftime("%Y/%m/%d")} \n\n"
 events.keys.sort.each do |k|
   text << "#{k} : #{events[k]}\n"
 end
+
+puts text
 
 tokens = open(File.join(File.dirname(__FILE__), "secret.txt"), &:read).split("\n")
 
@@ -41,7 +48,3 @@ end
 
 @client.update(text)
 
-#@client.home_timeline.each do |tweet|
-#  puts tweet.user.name + ":" + tweet.user.screen_name
-#  puts tweet.text
-#end
