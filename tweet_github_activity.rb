@@ -28,6 +28,11 @@ JSON.parse(res.body).each do |event|
   puts type + " " + event["repo"]["name"]
 end
 
+if events.length == 0
+  puts "no activity"
+  return
+end
+
 puts "------------------"
 
 text = "GitHub Activity - #{target.strftime("%Y/%m/%d")} \n\n"
