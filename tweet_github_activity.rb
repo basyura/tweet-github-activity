@@ -13,6 +13,25 @@ res = Net::HTTP.get_response(uri)
 events = {}
 target = Time.now - 24 * 60 * 60
 
+def change_event(event)
+  type = event["type"].sub("Event", "")
+  return event if type != "Create"
+
+  payload = event["payload"]
+  # change first commit to push
+  if  !payload["ref"] 
+    event["type"] = "Push"
+    return event
+  end
+  # change to tag event
+  if payload["ref_type"] == "tag"
+    event["type"] = "Tag"
+    return event
+  end
+
+  event
+end
+
 JSON.parse(res.body).each do |event|
   # event time
   time = Time.parse(event["created_at"]).localtime
@@ -20,6 +39,7 @@ JSON.parse(res.body).each do |event|
     next
   end
 
+  event = change_event(event)
   # event type
   type = event["type"].sub("Event", "")
   # count event
@@ -29,6 +49,7 @@ JSON.parse(res.body).each do |event|
 end
 
 if events.length == 0
+  puts target
   puts "no activity"
   return
 end
