@@ -34,12 +34,9 @@ class TweetAcivity
   #
   #
   private def fetch(user, date)
-    uri = URI.parse("https://api.github.com/users/" + user + "/events")
-    res = Net::HTTP.get_response(uri)
-
+    # fetch github.com
     events = {}
-    JSON.parse(res.body).each do |event|
-      # event time
+    fetch_events(user).each do |event|
       time = Time.parse(event["created_at"]).localtime
       if time.year != date.year || time.month != date.month || time.day != date.day
         next
@@ -50,11 +47,18 @@ class TweetAcivity
       type = event["type"].sub("Event", "")
       # count event
       events[type] = (events[type] || 0) + 1
-
       puts type + " " + event["repo"]["name"]
     end
 
     events
+  end
+  #
+  #
+  private def fetch_events(user)
+    uri = URI.parse("https://api.github.com/users/" + user + "/events")
+    res = Net::HTTP.get_response(uri)
+    puts res.body
+    JSON.parse(res.body)
   end
   #
   #
@@ -120,9 +124,3 @@ class TweetAcivity
     client.update_with_media(text, open(png_path))
   end
 end
-
-
-@user = "basyura"
-@date = Time.now - 24 * 60 * 60 * 0
-TweetAcivity.new.tweet(@user, @date)
-
