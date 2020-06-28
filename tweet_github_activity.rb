@@ -46,8 +46,11 @@ class TweetAcivity
       # event type
       type = event["type"].sub("Event", "")
       # count event
-      events[type] = (events[type] || 0) + 1
-      puts type + " " + event["repo"]["name"]
+      if type == "Push"
+        events["Commit"] = (events["Commit"] || 0) + event["payload"]["size"].to_i
+      else
+        events[type] = (events[type] || 0) + 1
+      end
     end
 
     events
@@ -67,9 +70,10 @@ class TweetAcivity
     return event if type != "Create"
 
     payload = event["payload"]
-    # change first commit to push
-    if  !payload["ref"] 
+    # change first commit to push (CreateEvent -> PushEvent)
+    if !payload["ref"] 
       event["type"] = "Push"
+      event["payload"]["size"] = 1
       return event
     end
     # change to tag event

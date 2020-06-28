@@ -8,7 +8,7 @@ class UniteTest < Test::Unit::TestCase
   #
   def test_today_fetch_github
     client = TweetAcivity.new
-    events = client.__send__("fetch", "basyura", Time.now - 24 * 60 * 60 * 3)
+    events = client.__send__("fetch", "basyura", Time.now)
   end
   #
   #
@@ -25,13 +25,14 @@ class UniteTest < Test::Unit::TestCase
     
     # 6.28
     assert.call(6, 28, proc {|events|
-      assert_equal events.length, 1
+      assert_equal events.length, 2
+      assert_equal events["Commit"], 2
       assert_equal events["Watch"], 1
     })
     # 6.27
     assert.call(6, 27, proc {|events|
       assert_equal events.length, 1
-      assert_equal events["Push"], 2
+      assert_equal events["Commit"], 2
     })
     # 6.26
     assert.call(6, 26, proc {|events|
@@ -40,7 +41,7 @@ class UniteTest < Test::Unit::TestCase
     # 6.25
     assert.call(6, 25, proc {|events|
       assert_equal events.length, 3
-      assert_equal events["Push"], 5
+      assert_equal events["Commit"], 5
       assert_equal events["Tag"], 1
       assert_equal events["Create"], 1
     })
@@ -55,13 +56,13 @@ class UniteTest < Test::Unit::TestCase
     # 6.22
     assert.call(6, 22, proc {|events|
       assert_equal events.length, 2
-      assert_equal events["Push"], 2
+      assert_equal events["Commit"], 2
       assert_equal events["IssueComment"], 1
     })
     # 6.21
     assert.call(6, 21, proc {|events|
       assert_equal events.length, 3
-      assert_equal events["Push"], 3
+      assert_equal events["Commit"], 3
       assert_equal events["Create"], 1
       assert_equal events["Watch"], 1
     })
@@ -71,7 +72,7 @@ class UniteTest < Test::Unit::TestCase
       assert_equal events["PullRequest"], 1
       assert_equal events["Create"], 2
       assert_equal events["Delete"], 1
-      assert_equal events["Push"], 4
+      assert_equal events["Commit"], 5
       assert_equal events["Fork"], 1
       assert_equal events["IssueComment"], 1
     })
