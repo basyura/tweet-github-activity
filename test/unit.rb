@@ -10,9 +10,6 @@ class UniteTest < Test::Unit::TestCase
     client = TweetAcivity.new
     events = client.__send__("fetch", "basyura", Time.now)
   end
-  def test_hoge
-    assert_equal 1, 2
-  end
   #
   #
   def test_fetch
