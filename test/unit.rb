@@ -1,7 +1,7 @@
 require 'test/unit'
 require 'test/unit/rr'
 require 'json'
-require '../tweet_github_activity'
+require_relative '../tweet_github_activity'
 
 class UniteTest < Test::Unit::TestCase
   #
