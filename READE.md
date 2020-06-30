@@ -1,3 +1,5 @@
+![CI](https://github.com/basyura/tweet-github-activity/workflows/UnitTest/badge.svg)
+
 # tweet github activity.
 
 cron shell
