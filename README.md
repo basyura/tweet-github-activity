@@ -11,3 +11,5 @@ eval "$(rbenv init -)"
 ruby path_to_tweet_github_activity.rb
 ```
 
+
+![Screenshot](https://raw.githubusercontent.com/basyura/tweet-github-activity/master/images/image.png)
