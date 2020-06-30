@@ -8,7 +8,7 @@ cron shell
 export PATH="$HOME/.rbenv/bin:~/.rbenv/shims:$PATH"
 eval "$(rbenv init -)"
 
-ruby path_to_tweet_github_activity.rb
+ruby path_to_main.rb
 ```
 
 
