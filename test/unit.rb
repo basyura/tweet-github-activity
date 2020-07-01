@@ -8,7 +8,8 @@ class UniteTest < Test::Unit::TestCase
   #
   def test_today_fetch_github
     client = TweetAcivity.new
-    events = client.__send__("fetch", "basyura", Time.now)
+    stub(client).post_tweet { }
+    events = client.tweet("basyura", Time.now)
   end
   #
   #
