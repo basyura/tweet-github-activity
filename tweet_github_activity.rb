@@ -59,6 +59,9 @@ class TweetAcivity
   #
   private def fetch_events(user)
     uri = URI.parse("https://api.github.com/users/" + user + "/events")
+    if access_token
+      uri.query = 'access_token=' + access_token
+    end
     res = Net::HTTP.get_response(uri)
     puts res.body
     JSON.parse(res.body)
@@ -126,5 +129,14 @@ class TweetAcivity
     end
 
     client.update_with_media(text, open(png_path))
+  end
+  #
+  #
+  private def access_token
+    if !@access_token
+      tokens = open(File.join(File.dirname(__FILE__), "secret.txt"), &:read).split("\n")
+      @access_token = tokens.length >= 5 ? tokens[4] : ""
+    end
+    @access_token
   end
 end
