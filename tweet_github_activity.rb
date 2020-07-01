@@ -119,8 +119,7 @@ class TweetAcivity
   #
   #
   private def post_tweet(text, png_path)
-    tokens = open(File.join(File.dirname(__FILE__), "secret.txt"), &:read).split("\n")
-
+    tokens = open(config_path, &:read).split("\n")
     client = Twitter::REST::Client.new do |config|
       config.consumer_key        = tokens[0]
       config.consumer_secret     = tokens[1]
@@ -134,9 +133,17 @@ class TweetAcivity
   #
   private def access_token
     if !@access_token
-      tokens = open(File.join(File.dirname(__FILE__), "secret.txt"), &:read).split("\n")
-      @access_token = tokens.length >= 5 ? tokens[4] : ""
+      @access_token = ""
+      if File.exists?(config_path)
+        tokens = open(config_path, &:read).split("\n")
+        @access_token = tokens.length >= 5 ? tokens[4] : ""
+      end
     end
     @access_token
+  end
+  #
+  #
+  private def config_path
+    File.join(File.dirname(__FILE__), "secret.txt")
   end
 end
