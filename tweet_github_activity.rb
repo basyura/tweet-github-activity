@@ -101,7 +101,21 @@ class TweetAcivity
   private def generate_imgage(user)
     # fetch svg xml
     doc = Nokogiri::HTML(open("https://github.com/#{user}"))
-    xml = doc.search('div.js-yearly-contributions svg').first.to_s
+    xml = doc.search('div.js-calendar-graph svg').first.to_s
+    # todo: use css
+    xml = xml.gsub("var(--color-calendar-graph-day-bg)", "rgba(27, 31, 35, 0.06)")
+    xml = xml.gsub("var(--color-calendar-graph-day-border)", "rgba(27, 31, 35, 0.06)")
+    xml = xml.gsub("var(--color-calendar-graph-day-L1-bg)", "rgb(155, 233, 168)")
+    xml = xml.gsub("var(--color-calendar-graph-day-L2-bg)", "rgb(64, 196, 99)")
+    xml = xml.gsub("var(--color-calendar-graph-day-L3-bg)", "rgb(48, 161, 78)")
+    xml = xml.gsub("var(--color-calendar-graph-day-L4-bg)", "rgb(33, 110, 57)")
+
+    # convert background to white
+    xml = xml.sub("<svg ", "<svg style=\"fill: black\" ")
+    xml = xml.sub(
+      '<svg style="fill: black" width="828" height="128" class="js-calendar-graph-svg">',
+      '<svg fill="black" width="828" height="128" class="js-calendar-graph-svg">
+         <path d="M0 0 L 828 0 L 828 320 L 0 320" style="fill:#FFFFFF;stroke-width:0" />')
 
     # write file. (todo: tempfile)
     png_path = File.join(File.dirname(__FILE__), "#{user}.png")
