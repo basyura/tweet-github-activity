@@ -58,12 +58,11 @@ class TweetAcivity
   #
   #
   private def fetch_events(user)
-    uri = URI.parse("https://api.github.com/users/" + user + "/events")
-    if access_token
-      uri.query = 'access_token=' + access_token
-    end
-    res = Net::HTTP.get_response(uri)
-    puts res.body
+    uri = URI.parse("https://api.github.com/users/#{user}/events")
+    http = Net::HTTP.new(uri.host, uri.port)
+    http.use_ssl = true
+
+    res = http.get(uri.path, Authorization: "token #{access_token}")
     JSON.parse(res.body)
   end
   #
