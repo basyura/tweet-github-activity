@@ -37,6 +37,7 @@ class TweetAcivity
     # fetch github.com
     events = {}
     fetch_events(user).each do |event|
+      puts event
       time = Time.parse(event["created_at"]).localtime
       if time.year != date.year || time.month != date.month || time.day != date.day
         next
