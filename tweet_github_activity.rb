@@ -37,16 +37,9 @@ class TweetAcivity
     # fetch github.com
     events = {}
     fetch_events(user).each do |event|
-      begin
       time = Time.parse(event["created_at"]).localtime
       if time.year != date.year || time.month != date.month || time.day != date.day
         next
-      end
-      rescue => e
-        puts e
-        puts "------------------"
-        puts event
-        raise e
       end
 
       event = change_event(event)
@@ -65,6 +58,9 @@ class TweetAcivity
   #
   #
   private def fetch_events(user)
+
+    return [] if !@access_token || @access_token == ""
+
     uri = URI.parse("https://api.github.com/users/#{user}/events")
     http = Net::HTTP.new(uri.host, uri.port)
     http.use_ssl = true
@@ -106,7 +102,7 @@ class TweetAcivity
   #
   private def generate_imgage(user)
     # fetch svg xml
-    doc = Nokogiri::HTML(URI.open("https://github.com/#{user}"))
+    doc = Nokogiri::HTML(open("https://github.com/#{user}"))
     xml = doc.search('div.js-calendar-graph svg').first.to_s
     # todo: use css
     xml = xml.gsub("var(--color-calendar-graph-day-bg)", "rgba(27, 31, 35, 0.06)")
