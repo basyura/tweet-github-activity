@@ -27,6 +27,7 @@ class TweetAcivity
     puts png_path
 
     post_tweet(text, png_path)
+    # `open #{png_path}`
   end
   #
   # for solargraph
@@ -58,8 +59,6 @@ class TweetAcivity
   #
   #
   private def fetch_events(user)
-
-    return [] if !@access_token || @access_token == ""
 
     uri = URI.parse("https://api.github.com/users/#{user}/events")
     http = Net::HTTP.new(uri.host, uri.port)
@@ -104,13 +103,12 @@ class TweetAcivity
     # fetch svg xml
     doc = Nokogiri::HTML(open("https://github.com/#{user}"))
     xml = doc.search('div.js-calendar-graph svg').first.to_s
-    # todo: use css
-    xml = xml.gsub("var(--color-calendar-graph-day-bg)", "rgba(27, 31, 35, 0.06)")
-    xml = xml.gsub("var(--color-calendar-graph-day-border)", "rgba(27, 31, 35, 0.06)")
-    xml = xml.gsub("var(--color-calendar-graph-day-L1-bg)", "rgb(155, 233, 168)")
-    xml = xml.gsub("var(--color-calendar-graph-day-L2-bg)", "rgb(64, 196, 99)")
-    xml = xml.gsub("var(--color-calendar-graph-day-L3-bg)", "rgb(48, 161, 78)")
-    xml = xml.gsub("var(--color-calendar-graph-day-L4-bg)", "rgb(33, 110, 57)")
+    # replace style by data-level
+    xml = xml.gsub('data-level="0"', 'fill="rgba(27, 31, 35, 0.06)"')
+    xml = xml.gsub('data-level="1"', 'fill="rgb(155, 233, 168)"')
+    xml = xml.gsub('data-level="2"', 'fill="rgb(64, 196, 99)"')
+    xml = xml.gsub('data-level="3"', 'fill="rgb(48, 161, 78)"')
+    xml = xml.gsub('data-level="4"', 'fill="rgb(33, 110, 57)"')
 
     # convert background to white
     xml = xml.sub("<svg ", "<svg style=\"fill: black\" ")
